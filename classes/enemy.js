@@ -13,7 +13,7 @@ class Enemy extends Sprite {
         this.distanceMovedDownLeft = 0; //storing distance moved for vertical directions
         this.xStep = this.width; //horizontal move distance per step
         this.yStep = this.height / 4; //vertical move distance per step
-        this.speed =1; //move speed
+        this.speed =0.1; //move speed
 
         this.prepareAttack = false; //enemy doesn't attack from start
         this.magazine = []; //stores bullets 
@@ -68,7 +68,6 @@ class Enemy extends Sprite {
                 this.prepareAttack = false //finished preparing an attack
             }
         }
-
     }
     
     shootBullet() {
