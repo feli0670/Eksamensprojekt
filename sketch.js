@@ -10,13 +10,19 @@ let health;
 
 let player, bunkers, enemies, redEnemy;
 
+let myHighScore = JSON.parse(localStorage.getItem('myScore'));
 let score = 0;
 
 let gameStarted;
 
-
 // let xPos;
 // let yPos;
+
+window.onbeforeunload = function () {
+  localStorage.setItem('myScore', JSON.stringify(myHighScore));
+}
+
+// let score = 0;
 
 function setup() {
   createCanvas(1200, 800); //canvas size defined
@@ -26,7 +32,10 @@ function setup() {
   textFont(font)
   gameStarted = false
   initializeObjects()
-  
+  if (myHighScore === null) {
+    myHighScore = 0;
+  }
+
 }
 
 function draw() {
@@ -52,7 +61,9 @@ function draw() {
   } 
   if (!gameStarted) {
     menu()
-    }
+  }
+  
+  
 }
 
 //runs once when a key is pressed
@@ -67,7 +78,8 @@ function scoreboard() {
   textSize(50);
   fill('#71f200')
   text(player.bulletCounter, width / 2, 50) //displays number of fired bullets
-  text(str(score), width / 2+100, 50) //displays number of fired bullets
+  text(myHighScore, width / 2+100, 50) //displays number of fired bullets
+  text(score, width / 2+200, 50) //displays number of fired bullets
   
   textSize(20)
 }

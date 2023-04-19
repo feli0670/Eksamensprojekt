@@ -16,7 +16,6 @@ class EnemiesInGame{
 
     //instansiates the enemies
     setup() {
-
         //make enemies location by a grid
         for (let j = 0; j < this.enemyNumberY; j++){ //creates number of enemies (veritcal)
             this.enemies[j]=[]
@@ -32,7 +31,6 @@ class EnemiesInGame{
     update(choosePlayer, gamestate) {
         for (let j = 0; j < this.enemies.length; j++){ //creates number of enemies (veritcal)
             for (let i = 0; i < this.enemies[j].length; i++) { //runs through every enemies
-                console.log(this.enemies[j][i].triggerInterval)
                 if (this.enemies[j][i].alive) { //
                     this.enemies[j][i].display() //displays them
                 } else if(this.deadEnemies == 0) { //else if all enemies are died (deadEnemies reset) 
