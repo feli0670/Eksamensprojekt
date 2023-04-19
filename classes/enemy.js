@@ -20,7 +20,7 @@ class Enemy extends Sprite {
         this.totalShots = Infinity; //number of shots each enemy has
         this.triggerValue = 1; //value that triggers an attack (bullet)
         this.triggerRandomizer; //randomizer that will trigger a shot 
-        this.triggerInterval = 60000; //interval where the probability of shot will be 1/triggerInterval
+        this.triggerInterval = 6000; //interval where the probability of shot will be 1/triggerInterval
         this.bulletCounter = 0; //counter for number of bullets fired
 
         this.alive = true;

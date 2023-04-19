@@ -22,8 +22,6 @@ window.onbeforeunload = function () {
   localStorage.setItem('myScore', JSON.stringify(myHighScore));
 }
 
-// let score = 0;
-
 function setup() {
   createCanvas(1200, 800); //canvas size defined
   rectMode(CENTER);
@@ -100,6 +98,7 @@ function menu() {
     title = 'Space Invaders'
     buttonText = 'Start'
   } else {
+    myHighScore = score; 
     title = 'Game Over'
     buttonText = 'Restart'
   }
