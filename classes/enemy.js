@@ -4,7 +4,7 @@ class Enemy extends Sprite {
         this.img = enemyImg //enemy image is initialized
         this.index = index //enemy image is initialized
         this.width = 60;
-        this.height= this.width * 584/804 
+        this.height= this.width * 584/804
 
         this.initializeMovement = true; //initialize enemy movement towards right
         this.distanceMovedRight = 0; //storing distance moved for horizontal directions
@@ -16,10 +16,10 @@ class Enemy extends Sprite {
         this.speed =1; //move speed
 
         this.prepareAttack = false; //enemy doesn't attack from start
-        this.magazine = []; //stores bullets 
+        this.magazine = []; //stores bullets
         this.totalShots = Infinity; //number of shots each enemy has
         this.triggerValue = 1; //value that triggers an attack (bullet)
-        this.triggerRandomizer; //randomizer that will trigger a shot 
+        this.triggerRandomizer; //randomizer that will trigger a shot
         this.triggerInterval = 6000; //interval where the probability of shot will be 1/triggerInterval
         this.bulletCounter = 0; //counter for number of bullets fired
 
@@ -28,10 +28,13 @@ class Enemy extends Sprite {
 
     display(index) {
         image(this.img[this.index],this.x, this.y, this.width, this.height)
-    } 
+    }
+
 
     //makes enemy move in pattern
     move() {
+
+
         if (this.initializeMovement || this.distanceMovedDownLeft > this.yStep) { //if enemy movement is initialized or it has moved yStep distance downwards along left side
             this.distanceMovedLeft = 0; //reset distanceMovedLeft
             this.x += this.speed; //move towards right edge
@@ -70,13 +73,13 @@ class Enemy extends Sprite {
         }
 
     }
-    
+
     shootBullet() {
         for (let i = 0; i <= this.magazine.length - 1; i++) { //runs through magazine and shoots the bullets once loaded into magazine, also assures all bullets fired is still displayed
             this.magazine[i].speed = 2 //speed of the bullets are set
             this.magazine[i].display() //displays bullets
             this.magazine[i].updatePosition() //shoots bullet
-            
+
             if (this.magazine[i].y >= height) { //if bullet hits bunker
                 this.magazine.shift() //destry bullet by removing first bullet from array
             }
@@ -89,5 +92,3 @@ class Enemy extends Sprite {
         }
     }
 }
-    
-
