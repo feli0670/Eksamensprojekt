@@ -2,29 +2,64 @@ class Ufo extends Sprite {
   constructor(x, y) {
     super(x, y);
     this.img = redEnemyImg;
-    this.height = (this.width * 156) / 360;
-    this.totalSpawn = Infinity; //number of shots each enemy has
-    this.triggerValue = 1; //value that triggers an attack (bullet)
-    this.triggerRandomizer; //randomizer that will trigger a shot
-    this.triggerInterval = 5; //interval where the probability of shot will be 1/triggerInterval
     this.width = 75;
     this.height = (this.width * 210) / 480;
-    this.x = width + this.width;
-    this.y = 100;
-    this.speed = 3;
-    this.move = false;
+    this.x;
+    this.y;
+    
+    this.xStart = width + this.width
+
+    this.speed = 2.5;
+    this.moveLeft;
+    this.moveRight;
+    this.moveDirection = 0;
+
+    this.triggerValue = 1; //value that triggers an attack (bullet)
+    this.triggerRandomizer; //randomizer that will trigger a shot
+    this.triggerInterval = 5000; //interval where the probability of shot will be 1/triggerInterval
+
+    this.alive = true;
   }
 
-  spawn() {
-    this.triggerRandomizer = int(random(this.triggerInterval));
-    if (this.triggerRandomizer == this.triggerValue) {
-      this.triggerRandomizer = this.triggerValue;
-      this.move = true;
-    }
-    if (this.move && this.x > -this.width) {
-      this.x -= this.speed;
+  move() {
+    this.alive = true
+    if (this.moveLeft) {
+      this.moveDirection = -1
+    } else if (this.moveRight) {
+      this.moveDirection = 1
     } else {
-      this.move = false;
+      this.moveDirection = 0
+
     }
+    
+    if (this.x >= width+this.width/2) {
+      this.moveRight = false
+      this.triggerRandomizer = int(random(-this.triggerInterval)); //triggerRandomizer is set to a random number continuously
+      if (this.triggerRandomizer == -this.triggerValue) {
+        this.moveLeft = true
+      } 
+    }
+    
+    if (this.x <= -this.width/2) {
+      this.moveLeft = false
+      this.triggerRandomizer = int(random(this.triggerInterval)); //triggerRandomizer is set to a random number continuously
+      if (this.triggerRandomizer == this.triggerValue) {
+        this.moveRight = true
+      }
+    }
+
   }
+ 
+
+  updatePosition() {
+    this.x += this.speed * this.moveDirection;
+  }
+  
+  killed() {
+    this.alive = false
+    this.x = this.xStart
+  }
+
+
 }
+    

@@ -33,11 +33,11 @@ class Player extends Sprite {
     update(gameState) {
         if (this.alive) {
             this.display(); //displays player
+            this.displayHealth(); //displays health
             if (gameState) {
                 this.updatePosition(); //updates player poosition
                 this.edgeDetection(); //stays in game space
                 this.fireBullet(); //can shoot bullets
-                this.displayHealth(); //displays health
                 this.manageHealth(); //manages health 
                 this.xPos = mouseX
                 this.YPos = mouseY

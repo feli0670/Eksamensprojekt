@@ -14,11 +14,11 @@ let myHighScore = JSON.parse(localStorage.getItem("myScore"));
 let score = 0;
 
 let gameStarted;
+let gamePaused = false;
 
 let frameGap = 15
 
-let title;
-let buttonText;
+let title, buttonText, highScoreOffset;
 
 
 window.onbeforeunload = function () {
@@ -43,25 +43,24 @@ function setup() {
 function draw() {
   if (player.alive || !player.alive) {
     background("black");
-    ufo.display()
-    ufo.spawn()
+    ufo.update(player)
     fill("#71f200");
     noStroke()
     rect(width / 2, 0, width, frameGap);
     rect(width / 2, height, width, frameGap);
     rect(0, height/2, frameGap, height);
     rect(width, height/2, frameGap, height);
-
+    
     player.update(gameStarted); //calls update method for the player
-    bunkers.update(player, enemies); //calls update method for the enemies with argument of player and enemies
+    bunkers.update(player, enemies, gameStarted); //calls update method for the enemies with argument of player and enemies
     enemies.update(player, gameStarted); //calls update method for the enemies with argument of player
+      
+      scoreboard(); //displays scoreboard
+  } 
 
-    scoreboard(); //displays scoreboard
-  }
-
-  if (!player.alive) {
+  if (!player.alive || gamePaused) {
     gameStarted = false;
-  }
+  } 
   if (!gameStarted) {
     menu();
   }
@@ -69,8 +68,18 @@ function draw() {
 
 //runs once when a key is pressed
 function keyPressed() {
-  if (player.alive) {
-    player.controller(); //calls method that makes player move and shoot when key pressed
+  if (gameStarted) {
+    if (player.alive) {
+      player.controller(); //calls method that makes player move and shoot when key pressed
+    }
+    if (keyCode == 27) {
+      if (!gamePaused) {
+        gamePaused = true
+        
+      } else {
+      gamePaused = false
+    }
+    } 
   }
 }
 
@@ -90,24 +99,36 @@ function menu() {
   let buttonHeight = 50;
   let buttonFill;
   let buttonStroke;
-
+  let scoreOffset;
   
-  if (player.alive) {
-    startMenu();
-  } else {
-    gameOver();
-  }
 
   fill(87, 89, 96, 127);
   rect(xOffset, height / 2, width - frameGap, height - frameGap);
 
   fill(87, 89, 96, 230);
   stroke(113, 242, 0);
-  rect(xOffset, yOffset - 85, 800, height / 2.5);
+  rect(xOffset, yOffset - 115, 800, height / 2.5);
 
   fill("#71f200");
   textSize(100);
-  text(title, width / 2, height / 3);
+  text(title, width / 2, height / 3.75);
+  
+  if (player.alive && !gamePaused) {
+    startMenu();
+  } else {
+    textSize(25);
+    noStroke()
+    highScoreOffset = 130
+    scoreOffset = 75
+    if (gamePaused) {
+      pausedMenu()
+    }
+    else {
+      gameOver();
+    }
+    text('Score: '+ score, xOffset, yOffset-scoreOffset);
+  } 
+
 
   if (
     mouseX >= xOffset - buttonWidth / 2 &&
@@ -118,13 +139,18 @@ function menu() {
     buttonFill = "#71f200";
     buttonStroke = "black";
     if (mouseIsPressed) {
-      initializeObjects();
-      gameStarted = true;
+      if (!gamePaused) {
+        restart()
+      } else {
+        gameStarted = true;
+        gamePaused = false
+      }
     }
   } else {
     buttonFill = "black";
     buttonStroke = "#71f200";
   }
+  
   fill(buttonFill);
   stroke(buttonStroke);
   rect(xOffset, yOffset, buttonWidth, buttonHeight);
@@ -135,19 +161,33 @@ function menu() {
 
   fill('#71f200')
   
-  text('Highscore: '+ myHighScore, xOffset, yOffset-65);
-
+  text('Highscore: '+ myHighScore, xOffset, yOffset-highScoreOffset);
+  
+  
 }
 
 function startMenu() {
   title = "Space Invaders";
   buttonText = "Start";
+  highScoreOffset = 100
 }
 
 function gameOver() {
-  myHighScore = score;
+  // myHighScore = score;
   title = "Game Over";
   buttonText = "Restart";
+}
+
+function pausedMenu() {
+  // myHighScore = score;
+  title = "Paused";
+  buttonText = "Continue";
+}
+
+function restart() {
+  initializeObjects();
+        gameStarted = true;
+        score = 0 ;
 }
 
 function initializeObjects() {
@@ -160,7 +200,8 @@ function initializeObjects() {
   bunkers = new BunkersInGame(); //object of BunkersInGame class is instantiated
   bunkers.setup(); //calls setup method for the object that instansiates bunkers
 
-  ufo = new Ufo(width / 2, height / 2);
+  ufo = new UfoInGame();
+  ufo.setup();
 }
 
 //preload of images
