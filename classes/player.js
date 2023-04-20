@@ -11,7 +11,7 @@ class Player extends Sprite {
         
         this.magazine = []; //will store Bullet objects
         this.bulletCounter = 0; //counts number of shots
-        this.cooldownTime = 30;
+        this.cooldownTime = 0;
         
         this.hpImg = playerImg; //player image is initialized
         this.alive = true;

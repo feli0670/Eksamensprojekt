@@ -43,7 +43,7 @@ function setup() {
 function draw() {
   if (player.alive || !player.alive) {
     background("black");
-    ufo.update(player)
+    ufo.update(player, gameStarted)
     fill("#71f200");
     noStroke()
     rect(width / 2, 0, width, frameGap);
@@ -64,6 +64,7 @@ function draw() {
   if (!gameStarted) {
     menu();
   }
+  
 }
 
 //runs once when a key is pressed
@@ -113,29 +114,31 @@ function menu() {
   textSize(100);
   text(title, width / 2, height / 3.75);
   
-  if (player.alive && !gamePaused) {
+  if (!gameStarted && !gamePaused) {
     startMenu();
-  } else {
-    textSize(25);
-    noStroke()
-    highScoreOffset = 130
-    scoreOffset = 75
-    if (gamePaused) {
-      pausedMenu()
-    }
-    else {
-      gameOver();
-    }
+  } else if (gamePaused) {
+      textSize(25);
+      noStroke()
+      highScoreOffset = 125
+      scoreOffset = 75
+    pausedMenu()
     text('Score: '+ score, xOffset, yOffset-scoreOffset);
-  } 
-
-
-  if (
-    mouseX >= xOffset - buttonWidth / 2 &&
-    mouseX <= xOffset + buttonWidth / 2 &&
-    mouseY >= yOffset - buttonHeight / 2 &&
-    mouseY <= yOffset + buttonHeight / 2
-  ) {
+  }
+  
+  if (!player.alive) {
+      textSize(25);
+      noStroke()
+      highScoreOffset = 125
+      scoreOffset = 75
+    text('Score: '+ score, xOffset, yOffset-scoreOffset);
+    gameOver();
+    
+  }
+  
+  if (mouseX >= xOffset - buttonWidth / 2
+    && mouseX <= xOffset + buttonWidth / 2
+    && mouseY >= yOffset - buttonHeight / 2
+    && mouseY <= yOffset + buttonHeight / 2) {
     buttonFill = "#71f200";
     buttonStroke = "black";
     if (mouseIsPressed) {
@@ -173,21 +176,33 @@ function startMenu() {
 }
 
 function gameOver() {
-  // myHighScore = score;
+  updateHighScore()
+  
   title = "Game Over";
   buttonText = "Restart";
+  console.log('')
 }
 
 function pausedMenu() {
-  // myHighScore = score;
+  updateHighScore()
   title = "Paused";
   buttonText = "Continue";
+  
 }
 
 function restart() {
   initializeObjects();
-        gameStarted = true;
-        score = 0 ;
+    gameStarted = true;
+    score = 0 ;
+}
+
+function updateHighScore() {
+  if (!player.alive) {
+    if (score > myHighScore) {
+      myHighScore = score;
+      
+    }
+  }
 }
 
 function initializeObjects() {

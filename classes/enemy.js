@@ -21,7 +21,7 @@ class Enemy extends Sprite {
     this.yStart = y;
     this.xStep = 125; //horizontal move distance per step
     this.yStep = this.width / 4; //vertical move distance per step
-    this.speed = 0.25  ; //move speed
+    this.speed = 0.25; //move speed
     this.xMoveDirection = 0;
     this.yMoveDirection = 0;
 

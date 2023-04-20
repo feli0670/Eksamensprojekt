@@ -37,8 +37,7 @@ class EnemiesInGame {
   update(choosePlayer, gamestate) {
     for (let j = 0; j < this.enemies.length; j++) {
       //creates number of enemies (veritcal)
-      for (let i = 0; i < this.enemies[j].length; i++) {
-        //runs through every enemies
+      for (let i = 0; i < this.enemies[j].length; i++) {//runs through every enemies
         if (this.enemies[j][i].alive) {
           this.enemies[j][i].display(); //displays them
           if (choosePlayer.alive && gamestate) {
@@ -54,7 +53,7 @@ class EnemiesInGame {
           if (frameCount > 30) {//if 30 frames has gone by
              //makes them shoot more often
             this.deadEnemies = 0; //reset number of dead enemies
-            this.speedBoost = 0
+            this.speedBoost = 1.2
             this.triggerIntervalReducer = 9/20
             this.setup();
             
@@ -87,10 +86,9 @@ class EnemiesInGame {
               choosePlayer.y3,
               this.enemies[m][i].magazine[j].x,
               this.enemies[m][i].magazine[j].y +
-                this.enemies[m][i].magazine[j].height / 2
+              this.enemies[m][i].magazine[j].height / 2
             )
-          ) {
-            //if player bullet on left side of enemy edge
+          ) { //if player bullet on left side of enemy edge
             this.enemies[m][i].magazine.splice(j, 1); //destroy player bullet by removing from array
             choosePlayer.hp -= 1;
             choosePlayer.hit = true;
@@ -188,7 +186,7 @@ class EnemiesInGame {
     for (let m = 0; m < this.enemies.length; m++) {
       for (let i = 0; i < this.enemies[m].length; i++) {
         if (
-          this.enemies[m][i].y + this.enemies[m][i].height / 2 >= height - 230) {
+          this.enemies[m][i].y + this.enemies[m][i].height / 2 >= choosePlayer.y-choosePlayer.height/2) {
           choosePlayer.hp = 0;
           break;
         }
@@ -301,13 +299,15 @@ class UfoInGame{
     this.ufo = new Ufo(width + 75, 100)
   }
 
-  update(choosePlayer) {
+  update(choosePlayer, gameState) {
     this.ufo.display()
-    this.ufo.move()
+    if (this.ufo.alive && gameState) {
+      this.ufo.move()
     // this.ufo.killed()
     this.ufo.updatePosition()
     this.damagedByPlayer(choosePlayer)
   }
+}
 
   damagedByPlayer(choosePlayer) {
     for (let j = 0; j < choosePlayer.magazine.length; j++) {
@@ -315,23 +315,15 @@ class UfoInGame{
       let playerBullet = choosePlayer.magazine[j];
 
       //if bullet hits enemy (compares enemy and bullet location)
-      if (this.ufo.alive) {
-        if (
-          playerBullet.y - playerBullet.height / 2 <=
-          this.ufo.y + this.ufo.height / 2 && //if player bullet at enemy altitude
-          playerBullet.x + playerBullet.width / 2 >=
-          this.ufo.x - this.ufo.width / 2 && //if player bullet on right side of bunker edge
-          playerBullet.x - playerBullet.width / 2 <=
-          this.ufo.x + this.ufo.width / 2
-        ) {
+        if (playerBullet.y - playerBullet.height / 2 <= this.ufo.y + this.ufo.height / 2 && //if player bullet at enemy altitude
+          playerBullet.x + playerBullet.width / 2 >= this.ufo.x - this.ufo.width / 2 && //if player bullet on right side of bunker edge
+          playerBullet.x - playerBullet.width / 2 <= this.ufo.x + this.ufo.width / 2 ) {
           //if player bullet on left side of enemy edge
           this.ufo.killed()
           choosePlayer.magazine.splice(j, 1); //destroy bullet by removing from array
           score += 300; //1 is added to score
          
-          
 
-        }
       }
     }
   }
