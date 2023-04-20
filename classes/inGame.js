@@ -4,7 +4,7 @@ class EnemiesInGame {
     this.enemyNumberX = 14; //number of enemies on x axis
     this.enemyNumberY = 5; //number of enemies on y axis
     this.xOffset = 82.5; //start offset for x coordinate
-    this.yOffset = 120; //start offset for y coordinate
+    this.yOffset = 60*2.5; //start offset for y coordinate
     this.xSpace = 75;
     this.ySpace = 55; //vertical space between enemies
 

@@ -8,15 +8,18 @@ let font;
 
 let health;
 
-let player, bunkers, enemies, redEnemy;
+let player, bunkers, enemies, ufo;
 
 let myHighScore = JSON.parse(localStorage.getItem("myScore"));
 let score = 0;
 
 let gameStarted;
 
+let frameGap = 15
+
 let title;
 let buttonText;
+
 
 window.onbeforeunload = function () {
   localStorage.setItem("myScore", JSON.stringify(myHighScore));
@@ -28,6 +31,8 @@ function setup() {
   imageMode(CENTER);
   textAlign(CENTER, CENTER);
   textFont(font);
+  
+  
   gameStarted = false;
   initializeObjects();
   if (myHighScore === null) {
@@ -37,10 +42,15 @@ function setup() {
 
 function draw() {
   if (player.alive || !player.alive) {
+    background("black");
+    ufo.display()
+    ufo.spawn()
     fill("#71f200");
-    rect(width / 2, height / 2, width, height);
-    fill("black");
-    rect(width / 2, height / 2, width - 20, height - 20);
+    noStroke()
+    rect(width / 2, 0, width, frameGap);
+    rect(width / 2, height, width, frameGap);
+    rect(0, height/2, frameGap, height);
+    rect(width, height/2, frameGap, height);
 
     player.update(gameStarted); //calls update method for the player
     bunkers.update(player, enemies); //calls update method for the enemies with argument of player and enemies
@@ -67,9 +77,8 @@ function keyPressed() {
 function scoreboard() {
   textSize(50);
   fill("#71f200");
-  text(player.bulletCounter, width / 2, 50); //displays number of fired bullets
-  text(myHighScore, width / 2 + 100, 50); //displays number of fired bullets
-  text(score, width / 2 + 200, 50); //displays number of fired bullets
+  text(score, width / 2, 50, ); //displays number of fired bullets
+  // text(myHighScore, width / 2 + 100, 50); //displays number of fired bullets
 
   textSize(20);
 }
@@ -82,6 +91,7 @@ function menu() {
   let buttonFill;
   let buttonStroke;
 
+  
   if (player.alive) {
     startMenu();
   } else {
@@ -89,7 +99,7 @@ function menu() {
   }
 
   fill(87, 89, 96, 127);
-  rect(xOffset, height / 2, width - 20, height - 20);
+  rect(xOffset, height / 2, width - frameGap, height - frameGap);
 
   fill(87, 89, 96, 230);
   stroke(113, 242, 0);
@@ -120,7 +130,13 @@ function menu() {
   rect(xOffset, yOffset, buttonWidth, buttonHeight);
   fill(buttonStroke);
   textSize(35);
+  noStroke()
   text(buttonText, xOffset, yOffset);
+
+  fill('#71f200')
+  
+  text('Highscore: '+ myHighScore, xOffset, yOffset-65);
+
 }
 
 function startMenu() {
@@ -144,7 +160,7 @@ function initializeObjects() {
   bunkers = new BunkersInGame(); //object of BunkersInGame class is instantiated
   bunkers.setup(); //calls setup method for the object that instansiates bunkers
 
-  redEnemy = new RedEnemy(width / 2, height / 2);
+  ufo = new Ufo(width / 2, height / 2);
 }
 
 //preload of images
