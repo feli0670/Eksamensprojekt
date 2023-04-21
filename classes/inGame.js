@@ -1,8 +1,8 @@
 class EnemiesInGame {
 	constructor() {
 		this.enemies = []; //stores enemies
-		this.enemyNumberX = 2; //number of enemies on x axis
-		this.enemyNumberY = 1; //number of enemies on y axis
+		this.enemyNumberX = 13; //number of enemies on x axis
+		this.enemyNumberY = 5; //number of enemies on y axis
 		this.xOffset = 85; //start offset for x coordinate
 		this.yOffset = 60 * 2.5; //start offset for y coordinate
 		this.xSpace = 75; //horisontal space between enemies
@@ -130,6 +130,7 @@ class EnemiesInGame {
 							choosePlayer.magazine.splice(j, 1); //destroy player bullet by splicing from array
 							this.enemies[m][i].magazine.splice(l, 1); //destroy enemy bullet by splicing from array
 						}
+						break
 					}
 				}
 			}

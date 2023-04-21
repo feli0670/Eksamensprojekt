@@ -101,7 +101,7 @@ function menu() {
 	rect(xOffset, height / 2, width - frameGap, height - frameGap);
 
 	//outline
-	fill(87, 89, 96, 127);
+	fill(87, 89, 96, 215);
 	stroke(113, 242, 0);
 	rect(xOffset, yOffset - 115, 800, height / 2.5);
 
