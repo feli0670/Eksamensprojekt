@@ -1,223 +1,223 @@
-let playerImg, playerExplosionImg
-let enemyImg = []
-let enemy1Img, enemy2Img, enemy3Img, enemy4Img, enemy5Img
-let redEnemyImg
-let bulletImg
+let playerImg, playerExplosionImg; //player images
+let enemyImg = []; //array for enemy imgages
+let ufoImg; //ufo image
+let bulletImg; //bullet image
 
-let font
+let font; //for font
 
-let health
+let player, bunkers, enemies, ufo; //game objects in game
 
-let player, bunkers, enemies, ufo
+let myHighScore = JSON.parse(localStorage.getItem('myScore')); //local highscore
+let score = 0; //score
 
-let myHighScore = JSON.parse(localStorage.getItem('myScore'))
-let score = 0
+let gameStarted = false; //game state variable
+let gamePaused = false; //game paused
 
-let gameStarted
-let gamePaused = false
+let frameGap = 15; //gamespacee frame gap
 
-let frameGap = 15
+let title, buttonText, highScoreOffset; //menu variables
 
-let title, buttonText, highScoreOffset
-
+//before website is closed
 window.onbeforeunload = function () {
-  localStorage.setItem('myScore', JSON.stringify(myHighScore))
-}
+	localStorage.setItem('myScore', JSON.stringify(myHighScore)); //save myHighScore localy
+};
 
 function setup() {
-  createCanvas(1200, 800) //canvas size defined
-  rectMode(CENTER)
-  imageMode(CENTER)
-  textAlign(CENTER, CENTER)
-  textFont(font)
+	createCanvas(1200, 800);
+	rectMode(CENTER);
+	imageMode(CENTER);
+	textAlign(CENTER, CENTER);
+	textFont(font);
 
-  gameStarted = false
-  initializeObjects()
-  if (myHighScore === null) {
-    myHighScore = 0
-  }
+	initializeObjects(); //initialize all objects
+	if (myHighScore === null) { //if myHighScore hasn't been defined yet
+		myHighScore = 0; //set myHighScore to 0
+	}
 }
 
 function draw() {
-  if (player.alive || !player.alive) {
-    background('black')
-    ufo.update(player, gameStarted)
-    fill('#71f200')
-    noStroke()
-    rect(width / 2, 0, width, frameGap)
-    rect(width / 2, height, width, frameGap)
-    rect(0, height / 2, frameGap, height)
-    rect(width, height / 2, frameGap, height)
+	background('black');
+	ufo.update(player, gameStarted); //calls update method for the ufo
+	
+	fill('#71f200');
+	stroke('#71f200');
+	
+	//game frames
+	rect(width / 2, 0, width, frameGap);
+	rect(width / 2, height, width, frameGap);
+	rect(0, height / 2, frameGap, height);
+	rect(width, height / 2, frameGap, height);
 
-    player.update(gameStarted) //calls update method for the player
-    bunkers.update(player, enemies, gameStarted) //calls update method for the enemies with argument of player and enemies
-    enemies.update(player, gameStarted) //calls update method for the enemies with argument of player
 
-    scoreboard() //displays scoreboard
-  }
+	player.update(gameStarted); //calls update method for the player
+	bunkers.update(player, enemies, gameStarted); //calls update method for the enemies with argument of player and enemies
+	enemies.update(player, gameStarted); //calls update method for the enemies with argument of player
 
-  if (!player.alive || gamePaused) {
-    gameStarted = false
-  }
-  if (!gameStarted) {
-    menu()
-  }
+	scoreboard(); //displays scoreboard
+	
+
+	if (!player.alive || gamePaused) { //if player is dead or game is paused
+		gameStarted = false; //game started set to falsse
+	}
+	if (!gameStarted) { //if games isn't started
+		menu(); //display menu
+	}
 }
 
 //runs once when a key is pressed
 function keyPressed() {
-  if (gameStarted) {
-    if (player.alive) {
-      player.controller() //calls method that makes player move and shoot when key pressed
-    }
-    if (keyCode == 27) {
-      if (!gamePaused) {
-        gamePaused = true
-      } else {
-        gamePaused = false
-      }
-    }
-  }
+	if (gameStarted) { //if game started
+		if (player.alive) { //if player alive
+			player.controller(); //calls method that makes player move and shoot when key pressed
+		}
+		if (keyCode == 27) { //if ESC key 
+			if (!gamePaused) { //if game isn't paused
+				gamePaused = true; //pause game
+			} 
+		}
+	}
 }
 
 function scoreboard() {
-  textSize(50)
-  fill('#71f200')
-  text(score, width / 2, 50) //displays number of fired bullets
-  // text(myHighScore, width / 2 + 100, 50); //displays number of fired bullets
+	textSize(50);
+	fill('#71f200');
+	text(score, width / 2, 50); //displays number of fired bullets
+	// text(myHighScore, width / 2 + 100, 50); //displays number of fired bullets
 
-  textSize(20)
+	textSize(20);
 }
 
 function menu() {
-  let xOffset = width / 2
-  let yOffset = height / 1.9
-  let buttonWidth = 300
-  let buttonHeight = 50
-  let buttonFill
-  let buttonStroke
-  let scoreOffset
+	let xOffset = width / 2; // xOffset
+	let yOffset = height / 1.9; //yOffste
+	let buttonWidth = 300; //buttom width
+	let buttonHeight = 50; //buttom height
+	let buttonFill; 
+	let buttonStroke; //buttom storke color
+	let scoreOffset;
 
-  fill(87, 89, 96, 127)
-  rect(xOffset, height / 2, width - frameGap, height - frameGap)
+	//window
+	fill(87, 89, 96, 127);
+	rect(xOffset, height / 2, width - frameGap, height - frameGap);
 
-  fill(87, 89, 96, 230)
-  stroke(113, 242, 0)
-  rect(xOffset, yOffset - 115, 800, height / 2.5)
+	//outline
+	fill(87, 89, 96, 127);
+	stroke(113, 242, 0);
+	rect(xOffset, yOffset - 115, 800, height / 2.5);
 
-  fill('#71f200')
-  textSize(100)
-  text(title, width / 2, height / 3.75)
+	//headline
+	fill('#71f200');
+	textSize(100);
+	text(title, width / 2, height / 3.75);
 
-  if (!gameStarted && !gamePaused) {
-    startMenu()
-  } else if (gamePaused) {
-    textSize(25)
-    noStroke()
-    highScoreOffset = 125
-    scoreOffset = 75
-    pausedMenu()
-    text('Score: ' + score, xOffset, yOffset - scoreOffset)
-  }
+	if (!gameStarted && !gamePaused) { //if game isn't started and game isn't paused
+		startMenu(); //display start menu
+	} else if (gamePaused) { //else if game is paused
+		textSize(25); 
+		noStroke();
+		highScoreOffset = 125;
+		scoreOffset = 75;
+		pausedMenu(); //diaplay pause menu
+		text('Score: ' + score, xOffset, yOffset - scoreOffset); //display current game store
+	}
 
-  if (!player.alive) {
-    textSize(25)
-    noStroke()
-    highScoreOffset = 125
-    scoreOffset = 75
-    text('Score: ' + score, xOffset, yOffset - scoreOffset)
-    gameOver()
-  }
+	if (!player.alive) { //if player is dead
+		textSize(25);
+		noStroke();
+		highScoreOffset = 125;
+		scoreOffset = 75;
+		text('Score: ' + score, xOffset, yOffset - scoreOffset); //display current game store
+		gameOver(); //display gameover menu
+	}
 
-  if (mouseX >= xOffset - buttonWidth / 2 && mouseX <= xOffset + buttonWidth / 2 && mouseY >= yOffset - buttonHeight / 2 && mouseY <= yOffset + buttonHeight / 2) {
-    buttonFill = '#71f200'
-    buttonStroke = 'black'
-    if (mouseIsPressed) {
-      if (!gamePaused) {
-        restart()
-      } else {
-        gameStarted = true
-        gamePaused = false
-      }
-    }
-  } else {
-    buttonFill = 'black'
-    buttonStroke = '#71f200'
-  }
+	if (mouseX >= xOffset - buttonWidth / 2 && mouseX <= xOffset + buttonWidth / 2 //if mouseX is between buttom right and left edge
+		&& mouseY >= yOffset - buttonHeight / 2 && mouseY <= yOffset + buttonHeight / 2) { //if mouseX is between top and buttom edge
+		//hover effect
+		buttonFill = '#71f200';
+		buttonStroke = 'black';
 
-  fill(buttonFill)
-  stroke(buttonStroke)
-  rect(xOffset, yOffset, buttonWidth, buttonHeight)
-  fill(buttonStroke)
-  textSize(35)
-  noStroke()
-  text(buttonText, xOffset, yOffset)
+		if (mouseIsPressed) { //if mouse pressed
+			if (!gamePaused) { //if games isn't paused
+				restart(); //restart game
+			} else {
+				gameStarted = true; //game is started
+				gamePaused = false; //game isn't paused
+			}
+		}
+	} else {
+		//static effect
+		buttonFill = 'black';
+		buttonStroke = '#71f200';
+	}
 
-  fill('#71f200')
+	fill(buttonFill);
+	stroke(buttonStroke);
+	rect(xOffset, yOffset, buttonWidth, buttonHeight);
+	fill(buttonStroke);
+	textSize(35);
+	noStroke();
+	text(buttonText, xOffset, yOffset);
 
-  text('Highscore: ' + myHighScore, xOffset, yOffset - highScoreOffset)
+	fill('#71f200');
+	text('Highscore: ' + myHighScore, xOffset, yOffset - highScoreOffset); //displays local highscore
 }
 
 function startMenu() {
-  title = 'Space Invaders'
-  buttonText = 'Start'
-  highScoreOffset = 100
+	title = 'Space Invaders';
+	buttonText = 'Start';
+	highScoreOffset = 100;
 }
 
 function gameOver() {
-  updateHighScore()
-
-  title = 'Game Over'
-  buttonText = 'Restart'
-  console.log('')
+	updateHighScore();
+	title = 'Game Over';
+	buttonText = 'Restart';
+	console.log('');
 }
 
 function pausedMenu() {
-  updateHighScore()
-  title = 'Paused'
-  buttonText = 'Continue'
+	title = 'Paused';
+	buttonText = 'Continue';
 }
 
 function restart() {
-  initializeObjects()
-  gameStarted = true
-  score = 0
+	initializeObjects();
+	gameStarted = true;
+	score = 0;
 }
 
 function updateHighScore() {
-  if (!player.alive) {
-    if (score > myHighScore) {
-      myHighScore = score
-    }
-  }
+	if (!player.alive) { //if player is dead
+		if (score > myHighScore) { //if game score greater than highscore
+			myHighScore = score; //set game score to local highscore
+		}
+	}
 }
 
 function initializeObjects() {
-  player = new Player(width / 2, height - 75) //object of Player class is instantiated
-  player.setHealth()
+	player = new Player(width / 2, height - 75); //object of Player class is instantiated
 
-  enemies = new EnemiesInGame() //object of EnemisInGame class is instantiated
-  enemies.setup() //calls setup method for the object that instansiates enemies
+	enemies = new EnemiesInGame(); //object of EnemisInGame class is instantiated
+	enemies.setup(); //calls setup method for the object that instansiates enemies
 
-  bunkers = new BunkersInGame() //object of BunkersInGame class is instantiated
-  bunkers.setup() //calls setup method for the object that instansiates bunkers
+	bunkers = new BunkersInGame(); //object of BunkersInGame class is instantiated
+	bunkers.setup(); //calls setup method for the object that instansiates bunkers
 
-  ufo = new UfoInGame()
-  ufo.setup()
+	ufo = new UfoInGame(); //object of ufoInGame class is instantiated
+	ufo.setup(); //calls setup method for the object that instansiates bunkers
 }
 
 //preload of images
 function preload() {
-  playerImg = loadImage('images/player.png')
-  for (let i = 5; i >= 1; i--) {
-    let img = loadImage(`images/enemy${i}.png`)
-    enemyImg.push(img)
-  }
-  enemyImg.push(loadImage('images/playerExplosion.gif'))
-  playerExplosionImg = loadImage('images/playerExplosion.gif')
+	playerImg = loadImage('images/player.png'); //player image loaded
+	playerExplosionImg = loadImage('images/playerExplosion.gif'); //player explosion loaded
+	for (let i = 5; i >= 1; i--) { //runs trough number of different enmy types
+		let img = loadImage(`images/enemy${i}.png`); //variable changes with loop
+		enemyImg.push(img); //pushes img into array
+	}
 
-  bulletImg = loadImage('images/bullet.png')
-  redEnemyImg = loadImage('images/redEnemy.png')
+	bulletImg = loadImage('images/bullet.png'); //bullet image loaded
+	ufoImg = loadImage('images/redEnemy.png'); //ufo image loaded
 
-  font = loadFont('font/poxel-font.ttf')
+	font = loadFont('font/poxel-font.ttf'); //font loaded
 }
