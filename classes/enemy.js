@@ -21,7 +21,7 @@ class Enemy extends Sprite {
 		this.yMoveDirection = 0; //vertial move direction
 		
 		this.magazine = []; //stores bullets
-		this.triggerInterval = 600
+		this.triggerInterval = 6000
 	}
 	
 	//displays enemy
