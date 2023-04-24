@@ -99,19 +99,14 @@ class EnemiesInGame {
 
 							if (rowIndex == 0) { //if killed enemy on upper row
 								score += 100; //1 is added to score
-								console.log('score 100')
 							} else if (rowIndex == 1) { //if killed enemy on second highest row
 								score += 75; //1 is added to score
-								console.log('score 75')
 							} else if (rowIndex == 2) { //if killed enemy on center row
 								score += 50; //1 is added to score
-								console.log('score 50')
 							} else if (rowIndex == 3) { //if killed enemy on second lowest row
 								score += 25; //1 is added to score
-								console.log('score 35')
 							} else if (rowIndex == 4) { //if killed enemy on buttom row
 								score += 10; //1 is added to score
-								console.log('score 10')
 							}
 						}
 					}
@@ -253,7 +248,6 @@ class UfoInGame {
 				&& playerBullet.y - playerBullet.height / 2 <= this.ufo.y + this.ufo.height / 2 ){ //if player bullet at ufo altitude buttom
 
 				this.ufo.kill(); //ufo are killed
-				console.log('killed')
 				choosePlayer.magazine.splice(playerIndex, 1); //destroys bullet by removing from array
 				score += 300; //300 points added to score
 			}
