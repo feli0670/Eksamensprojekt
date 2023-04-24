@@ -1,10 +1,10 @@
 class Bunker extends Sprite {
-	constructor(x, y) { //needs x and y parameters in order to instansiate a new Bullet
+	constructor(x, y) { //needs x and y parameters in order to instansiate a new Bunker
 		super(x, y); //initialize properties of mother class Sprite
 		this.width = 100; //image width changed from default
 		this.height = 40; //image width changed from default
-		this.startHealth = 5; //bunker start health set
-		this.hp = this.startHealth; //bunkers health is set to start health
+		this.startHp = 5; //bunker start health set
+		this.hp = this.startHp; //bunkers health is set to start health
 	}
 
 	display() {

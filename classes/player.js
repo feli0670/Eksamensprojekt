@@ -1,23 +1,23 @@
 class Player extends Sprite {
-	constructor(x, y) {
-		//needs x and y parameters in order to instansiate a new Player
+	constructor(x, y) { //needs x and y parameters in order to instansiate a new Player
 		super(x, y); //initialize properties of mother class Sprite
-		this.img = playerImg; //player image is initialized
 		this.width = 75; //image width
 		this.height = 75; //image height
-
+		this.img = playerImg; //player image is initialized
+		
 		this.moveDirection = 0; //moveDirection set to 0 - results in no movement
 		this.speed = 2.5; //move speed
 
 		this.magazine = []; //will store Bullet objects
-		this.bulletCounter = 0; //counts number of shots
-		this.cooldownTime = 2; //shot cooldowntime
+		this.cooldownTime = 30; //shot cooldowntime
 
 		this.hpImg = playerImg; //player hp image is initialized
 		this.alive = true; //player alive or dead
 		this.maxHp = 3; //player max hp
 		this.hp = this.maxHp //player hp
 		this.hit = false; //controls if player has been hit by a enmy bullet or not
+
+		this.newWave = false
 
 		//points for triangular hitbox
 		this.x1;
@@ -36,7 +36,6 @@ class Player extends Sprite {
 			if (gameState) { //if game started
 				this.updatePosition(); //updates player poosition
 				this.edgeDetection(); //stays in game space
-				this.fireBullet(); //can shoot bullets
 				this.manageHealth(); //manages health
 				this.x1 = this.x; //1st point x initialized
 				this.y1 = this.y - 20; //1st point y initialized
@@ -45,17 +44,23 @@ class Player extends Sprite {
 				this.x3 = this.x + this.width / 2 + 20; //3rd point x initialized
 				this.y3 = this.y2; //3rd point y initialized
 			}
+			this.fireBullet(gameState); //can shoot bullets
 		}
+	}
+	
+	//controls player movement based on direction
+	updatePosition() {
+		this.x += this.speed * this.moveDirection; //moves player based on moveDirection
 	}
 
 	//moves using arrow keys or 'wasd'
 	controller() {
 		if (!this.hit) { //if player hasn't been hit
-			if (keyCode == 32 && this.cooledDown()) { //if SPACE key and weapon cooldownTime passed by
+			if (keyCode == 32 && this.cooledDown() && !this.newWave) { //if SPACE key and weapon cooldownTime passed by
 				this.loadMagazine(); //calls method, bullet is fired
 				frameCount = 0; //resetting framcount
 			}
-
+			
 			//statements for controlling player direction
 			if (keyCode == LEFT_ARROW || keyCode == 65) { //if LEFT_ARROW or A key
 				this.moveDirection = -1; //player moves left
@@ -66,11 +71,7 @@ class Player extends Sprite {
 			}
 		}
 	}
-
-	//controls player movement based on direction
-	updatePosition() {
-		this.x += this.speed * this.moveDirection; //moves player based on moveDirection
-	}
+	
 
 	//edgeDetection, will prevent player from moving outside game space
 	edgeDetection() {
@@ -93,20 +94,21 @@ class Player extends Sprite {
 	//loads player magazine with bullets
 	loadMagazine() {
 		this.magazine.push(new Bullet(this.x, this.y - 50)); //bullets pushed into magazine
-		this.bulletCounter += 1; //shotCounter 1 higher for each shot fired/loaded
 	}
 
 	//fires shoot
-	fireBullet() {
-		for (let i = 0; i <= this.magazine.length - 1; i++) { //runs through magazine and assures all bullet fires and is still displayed
-			this.magazine[i].speed = -5; //displays bullets
-			this.magazine[i].display(); //displays bullets
-			this.magazine[i].updatePosition(); //shoots bullet
-
-			if (this.magazine[i].y < this.magazine[i].height / 2) { //if bullet has reached top edge
+	fireBullet(gameState) {
+		this.magazine.forEach(bullet => {
+			bullet.speed = -5; //displays bullets
+			bullet.display(); //displays bullets
+			if (gameState) {
+				bullet.updatePosition(); //shoots bullet
+			}
+	
+			if (bullet.y < bullet.height / 2) { //if bullet has reached top edge
 				this.magazine.shift(); //destroy bullet by removing first bullet from array
 			}
-		}
+		})
 	}
 
 	//displays health
@@ -117,7 +119,7 @@ class Player extends Sprite {
 		fill('#71f200'); 
 		textSize(hpSize);
 		text('HP:', xOffset - hpSize * 5, hpSize); //hp text
-
+		
 		for (let i = 0; i < this.hp; i++) { //runs through hp value
 			image(this.hpImg, xOffset + this.width * -i, hpSize, hpSize, hpSize); //displays the number hp
 		}
