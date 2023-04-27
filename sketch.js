@@ -137,11 +137,11 @@ function menu() {
 		buttonStroke = 'black';
 
 		if (mouseIsPressed) { //if mouse pressed
-			if (!gamePaused) { //if games isn't paused
-				restart(); //restart game
-			} else {
-				gameStarted = true; //game is started
-				gamePaused = false; //game isn't paused
+			if (!gamePaused) { //if games isn't paused, then player must be dead
+				restart(); //in that case then restart the game
+			} else { //else the game is paused
+				gameStarted = true; //and the game should just continue
+				gamePaused = false; //game isn't paused any more
 			}
 		}
 	} else {
@@ -172,7 +172,6 @@ function gameOver() {
 	updateHighScore();
 	title = 'Game Over';
 	buttonText = 'Restart';
-	console.log('');
 }
 
 function pausedMenu() {

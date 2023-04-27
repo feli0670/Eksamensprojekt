@@ -72,7 +72,6 @@ class Player extends Sprite {
 		}
 	}
 	
-
 	//edgeDetection, will prevent player from moving outside game space
 	edgeDetection() {
 		if (this.x > width - this.width) { //if player is near right edge
@@ -80,6 +79,11 @@ class Player extends Sprite {
 		} else if (this.x < this.width) { //if player is near left edge
 			this.moveDirection = 1; //changes direction, moves right instead
 		}
+	}
+
+	//loads player magazine with bullets
+	loadMagazine() {
+		this.magazine.push(new Bullet(this.x, this.y - 50)); //bullets pushed into magazine
 	}
 
 	//checks if weapon has cooled down
@@ -90,12 +94,7 @@ class Player extends Sprite {
 			return false;
 		}
 	}
-
-	//loads player magazine with bullets
-	loadMagazine() {
-		this.magazine.push(new Bullet(this.x, this.y - 50)); //bullets pushed into magazine
-	}
-
+	
 	//fires shoot
 	fireBullet(gameState) {
 		this.magazine.forEach(bullet => {
