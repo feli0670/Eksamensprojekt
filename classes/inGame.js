@@ -1,8 +1,8 @@
 class EnemiesInGame {
 	constructor() {
 		this.enemies = []; //stores enemies
-		this.enemyNumberX = 1; //number of enemies on x axis
-		this.enemyNumberY = 1; //number of enemies on y axis
+		this.enemyNumberX = 13; //number of enemies on x axis
+		this.enemyNumberY = 5; //number of enemies on y axis
 		this.deadEnemies = 0; //number of dead enemies
 
 		this.speedIncrease = 1; //value for reducing trigger interval
