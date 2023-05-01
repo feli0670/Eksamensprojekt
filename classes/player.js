@@ -98,7 +98,7 @@ class Player extends Sprite {
 	//fires shoot
 	fireBullet(gameState) {
 		this.magazine.forEach(bullet => {
-			bullet.speed = -5; //displays bullets
+			bullet.speed = -5; //initialize players bullet speed
 			bullet.display(); //displays bullets
 			if (gameState) {
 				bullet.updatePosition(); //shoots bullet
