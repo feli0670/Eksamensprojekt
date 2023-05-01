@@ -15,12 +15,12 @@ class EnemiesInGame {
 		for (let j = 0; j < this.enemyNumberY; j++) { //creates number of enemies (downwards)
 			this.enemies[j] = []; //creates 2D array, neww index for number of rows of enemies
 			for (let i = 0; i < this.enemyNumberX; i++) { //creates number of enemies (sidewways)
-				let xOffset = 85; //start offset for x coordinate
-				let yOffset = 60 * 2.5; //start offset for y coordinate
-				let xSpace = 75; //horisontal space between enemies
-				let ySpace = 55; //vertical space between enemies
-				let newX = xOffset + xSpace * i; //variable for x coordinate for new enemy
-				let newY = yOffset + ySpace * j; //variable for y coordinate for new enemy
+				const xOffset = 85; //start offset for x coordinate
+				const yOffset = 60 * 2.5; //start offset for y coordinate
+				const xSpace = 75; //horisontal space between enemies
+				const ySpace = 55; //vertical space between enemies
+				const newX = xOffset + xSpace * i; //variable for x coordinate for new enemy
+				const newY = yOffset + ySpace * j; //variable for y coordinate for new enemy
 
 				this.enemies[j].push(new Enemy(newX, newY, j)); //instantiates enemies by pushing in array
 
@@ -54,7 +54,7 @@ class EnemiesInGame {
 				 }
 			  }
 			});
-		 });
+		});
 
 		this.damagedByPlayer(choosePlayer); //controls if enemies are damaged by player
 		this.bulletsCollide(choosePlayer); //controls if enemy and player bullet has collided
@@ -95,6 +95,7 @@ class EnemiesInGame {
 							if (this.deadEnemies == this.enemyNumberX * this.enemyNumberY - 1) { //if all enemies are dead
 								frameCount = 0; //purpose for spawning new enemies after a certain time after a whole group has been eliminated
 							}
+							
 							this.deadEnemies += 1; //add 1 to dead enemies
 
 							if (rowIndex == 0) { //if killed enemy on upper row
@@ -153,10 +154,10 @@ class BunkersInGame {
 
 	//instansiates the bunkers
 	setup() {
-		let numberOfBunkers = 4; //total number of bunkers
-		let xSpace = 310; //horizontal space between bunkers
-		let xOffset = 135; //x offset
-		let yOffset = height - 150; //y offset
+		const numberOfBunkers = 4; //total number of bunkers
+		const xSpace = 310; //horizontal space between bunkers
+		const xOffset = 135; //x offset
+		const yOffset = height - 150; //y offset
 		for (let i = 0; i < numberOfBunkers; i++) { //creates certain number of bunkers
 			this.bunkers.push(new Bunker(xOffset + xSpace * i, yOffset)); //instansiates bunkers by pushing in array
 		}

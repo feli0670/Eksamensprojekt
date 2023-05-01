@@ -9,31 +9,33 @@ class Bunker extends Sprite {
 
 	display() {
 		rectMode(CENTER);
+		noStroke() //no stroke
 
-		stroke('#d50100');
-		fill('#d50100');
+		//flag
+		fill('#d50100'); //red 
 		if (this.hp >= 5) {
 			rect(this.x + this.width / 3 / 2, this.y - 70, this.width / 3, this.height / 2);
 		}
 
-		stroke('#5d25b2');
-		fill('#5d25b2');
+		//post
+		fill('#5d25b2'); //purple
 		if (this.hp >= 4) {
 			rect(this.x, this.y - 45, this.width / 20, this.height * 2);
 		}
 
-		stroke('#71f200');
-		fill('#71f200');
+		//roof
+		fill('#71f200'); //green
 		if (this.hp >= 3) {
 			ellipse(this.x, this.y - this.height / 2, this.width, this.height);
 		}
 
+		//base of bunker
 		if (this.hp >= 1) {
 			rect(this.x, this.y, this.width, this.height);
 		}
 
-		stroke('#5d25b2');
-		fill('#5d25b2');
+		//door
+		fill('#5d25b2'); //purple
 		if (this.hp >= 2) {
 			ellipse(this.x, this.y, this.width / 6, this.height / 2);
 			rect(this.x, this.y + 8, this.width / 6, this.height / 2);

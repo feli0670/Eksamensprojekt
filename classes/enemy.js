@@ -78,10 +78,10 @@ class Enemy extends Sprite {
 	//controlls the enemy attack
 	attack() {
 		let triggerRandomizer; //randomizer that will trigger a shot
-		let triggerValue = 1; //value that triggers an attack (bullet)
+		const triggerValue = 1; //value that triggers an attack (bullet)
 		let prepareAttack = false; //enemy doesn't attack from start
 		
-		triggerRandomizer = int(random(this.triggerInterval)); //triggerRandomizer is set to a random number continuously
+		triggerRandomizer =  int(random(this.triggerInterval)); //triggerRandomizer is set to a random number continuously
 		if (triggerRandomizer == triggerValue) { //if triggerRandomzier is equal to the triggerValue
 			prepareAttack = true; //enemy is now preparing an attack
 		}
@@ -99,7 +99,7 @@ class Enemy extends Sprite {
 				bullet.updatePosition(); //make bullets move
 			}
 	
-			if (bullet.y >= height) { //if bullet hits buttom of game space
+			if (bullet.y >= height-15) { //if bullet hits buttom of game space
 				this.magazine.shift(); //destroy bullet by removing first bullet from array
 			}
 		});
