@@ -54,7 +54,6 @@ function draw() {
 	enemies.update(player, gameStarted); //calls update method for the enemies with argument of player
 
 	scoreboard(); //displays scoreboard
-	
 
 	if (!player.alive || gamePaused) { //if player is dead or game is paused
 		gameStarted = false; //game started set to falsse
@@ -82,19 +81,14 @@ function scoreboard() {
 	textSize(50);
 	fill('#71f200');
 	text(score, width / 2, 50); //displays number of fired bullets
-	// text(myHighScore, width / 2 + 100, 50); //displays number of fired bullets
-
-	textSize(20);
 }
 
 function menu() {
-	let xOffset = width / 2; // xOffset
-	let yOffset = height / 1.9; //yOffste
-	let buttonWidth = 300; //buttom width
-	let buttonHeight = 50; //buttom height
-	let buttonFill; 
-	let buttonStroke; //buttom storke color
-	let scoreOffset;
+	const xOffset = width / 2; // xOffset
+	const yOffset = height / 1.9; //yOffste
+	const buttonWidth = 300; //buttom width
+	const buttonHeight = 50; //buttom height
+	let fillColor, strokeColor, scoreOffset;
 
 	//window
 	fill(87, 89, 96, 127);
@@ -118,7 +112,7 @@ function menu() {
 		highScoreOffset = 125;
 		scoreOffset = 75;
 		pausedMenu(); //diaplay pause menu
-		text('Score: ' + score, xOffset, yOffset - scoreOffset); //display current game store
+		text('Score: ' + score, xOffset, yOffset - scoreOffset); //display current game score
 	}
 
 	if (!player.alive) { //if player is dead
@@ -126,15 +120,15 @@ function menu() {
 		noStroke();
 		highScoreOffset = 125;
 		scoreOffset = 75;
-		text('Score: ' + score, xOffset, yOffset - scoreOffset); //display current game store
+		text('Score: ' + score, xOffset, yOffset - scoreOffset); //display current game score
 		gameOver(); //display gameover menu
 	}
 
 	if (mouseX >= xOffset - buttonWidth / 2 && mouseX <= xOffset + buttonWidth / 2 //if mouseX is between buttom right and left edge
 		&& mouseY >= yOffset - buttonHeight / 2 && mouseY <= yOffset + buttonHeight / 2) { //if mouseX is between top and buttom edge
 		//hover effect
-		buttonFill = '#71f200';
-		buttonStroke = 'black';
+		fillColor = '#71f200';
+		strokeColor = 'black';
 
 		if (mouseIsPressed) { //if mouse pressed
 			if (!gamePaused) { //if games isn't paused, then player must be dead
@@ -146,18 +140,22 @@ function menu() {
 		}
 	} else {
 		//static effect
-		buttonFill = 'black';
-		buttonStroke = '#71f200';
+		fillColor = 'black';
+		strokeColor = '#71f200';
 	}
+	
+	//button
+	fill(fillColor);
+	stroke(strokeColor);
+	rect(xOffset, yOffset, buttonWidth, buttonHeight); 
 
-	fill(buttonFill);
-	stroke(buttonStroke);
-	rect(xOffset, yOffset, buttonWidth, buttonHeight);
-	fill(buttonStroke);
+	//button text
+	fill(strokeColor);
 	textSize(35);
 	noStroke();
 	text(buttonText, xOffset, yOffset);
 
+	//highscore text
 	fill('#71f200');
 	text('Highscore: ' + myHighScore, xOffset, yOffset - highScoreOffset); //displays local highscore
 }
@@ -217,6 +215,5 @@ function preload() {
 
 	bulletImg = loadImage('images/bullet.png'); //bullet image loaded
 	ufoImg = loadImage('images/redEnemy.png'); //ufo image loaded
-
 	font = loadFont('font/poxel-font.ttf'); //font loaded
 }

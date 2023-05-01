@@ -16,19 +16,16 @@ class Enemy extends Sprite {
 		this.lastDirection; //checks the latest move direction
 		this.xStep = 125; //horizontal move distance per step
 		this.yStep = this.width / 4; //vertical move distance per step
+		this.speed = 0.25; //move speed
 		this.xMoveDirection = 0; //horizontal move directions
 		this.yMoveDirection = 0; //vertial move direction
-		this.speed = 0.25; //move speed
 		
-
-		
-
 		this.magazine = []; //stores bullets
 		this.triggerInterval = 6000
 	}
 	
 	//displays enemy
-	display(index) {
+	display() {
 		image(this.img[this.index], this.x, this.y, this.width, this.height); //expects an array containing images
 	}
 	
@@ -42,15 +39,13 @@ class Enemy extends Sprite {
 		if (this.x >= this.xStart + this.xStep) { //if enemy has moved RIGHT
 			this.moveRight = false; //stop moving RIGHT
 			this.lastDirection = 'RIGHT'; //set last direction to RIGHT
-			this.xStart = this.x; //set new xStart to be xStep greater
+			this.xStart += this.xStep; //set new xStart to be xStep greater
 			this.moveDown = true; //move DOWN
 		}
-	
 
-	
 		if (this.y >= this.yStart + this.yStep) { //if enemy has moved DOWN
 			this.moveDown = false; //stop moving DOWN
-			this.yStart = this.y; //set yStart to be yStep greater
+			this.yStart += this.yStep; //set yStart to be yStep greater
 			if (this.lastDirection == 'RIGHT') { //if last direction was RIGHT
 				this.moveLeft = true; //move LEFT 
 			} else if (this.lastDirection == 'LEFT') { //else if last diretion was LEFT
@@ -61,7 +56,7 @@ class Enemy extends Sprite {
 		if (this.x <= this.xStart - this.xStep) { //if enemy has moved LEFT
 			this.moveLeft = false; //stop moving LEFT
 			this.lastDirection = 'LEFT'; //set last direction to LEFT
-			this.xStart = this.x; //set xStart to be xStep less
+			this.xStart -= this.xStep; //set xStart to be xStep less
 			this.moveDown = true; //move DOWN
 		}
 
@@ -82,12 +77,17 @@ class Enemy extends Sprite {
 	
 	//controlls the enemy attack
 	attack() {
-		let triggerValue = 1; //value that triggers an attack (bullet)
 		let triggerRandomizer; //randomizer that will trigger a shot
+		const triggerValue = 1; //value that triggers an attack (bullet)
+		let prepareAttack = false; //enemy doesn't attack from start
 		
-		triggerRandomizer = int(random(this.triggerInterval)); //triggerRandomizer is set to a random number continuously
+		triggerRandomizer =  int(random(this.triggerInterval)); //triggerRandomizer is set to a random number continuously
 		if (triggerRandomizer == triggerValue) { //if triggerRandomzier is equal to the triggerValue
+			prepareAttack = true; //enemy is now preparing an attack
+		}
+		if (prepareAttack) { //if enemy is preparing attack
 			this.magazine.push(new Bullet(this.x, this.y + this.height / 2)); //load magazine with a bullet
+			prepareAttack = false; //finished preparing an attack
 		}
 	}
 	
@@ -99,7 +99,7 @@ class Enemy extends Sprite {
 				bullet.updatePosition(); //make bullets move
 			}
 	
-			if (bullet.y >= height) { //if bullet hits buttom of game space
+			if (bullet.y >= height-15) { //if bullet hits buttom of game space
 				this.magazine.shift(); //destroy bullet by removing first bullet from array
 			}
 		});
