@@ -54,6 +54,7 @@ function draw() {
 	enemies.update(player, gameStarted); //calls update method for the enemies with argument of player
 
 	scoreboard(); //displays scoreboard
+	
 
 	if (!player.alive || gamePaused) { //if player is dead or game is paused
 		gameStarted = false; //game started set to falsse
