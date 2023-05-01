@@ -5,7 +5,7 @@ class Enemy extends Sprite {
 		this.height = (this.width * 584) / 804; //image height changed from default
 		this.img = enemyImg; //enemy image is initialized
 		this.index = index; //enemy image is initialized
-		
+		this.speed = 0.25; //move speed
 		this.alive = true; //status of enemy 
 
 		this.moveRight = true; //makes enemies move right from start, and controls movement to the right
@@ -16,7 +16,6 @@ class Enemy extends Sprite {
 		this.lastDirection; //checks the latest move direction
 		this.xStep = 125; //horizontal move distance per step
 		this.yStep = this.width / 4; //vertical move distance per step
-		this.speed = 0.25; //move speed
 		this.xMoveDirection = 0; //horizontal move directions
 		this.yMoveDirection = 0; //vertial move direction
 		
@@ -69,7 +68,7 @@ class Enemy extends Sprite {
 		}
 
 		if (this.moveDown) { //if move DOWN
-			this.yMoveDirection = 1; //vertical direction downwwards
+			this.yMoveDirection = 1; //vertical direction downwards
 		} else if (!this.moveDown) { //isn't moving down 
 			this.yMoveDirection = 0; //stop vertical movement
 		}
@@ -77,17 +76,12 @@ class Enemy extends Sprite {
 	
 	//controlls the enemy attack
 	attack() {
-		let triggerRandomizer; //randomizer that will trigger a shot
 		const triggerValue = 1; //value that triggers an attack (bullet)
-		let prepareAttack = false; //enemy doesn't attack from start
+		let triggerRandomizer; //randomizer that will trigger a shot
 		
 		triggerRandomizer =  int(random(this.triggerInterval)); //triggerRandomizer is set to a random number continuously
-		if (triggerRandomizer == triggerValue) { //if triggerRandomzier is equal to the triggerValue
-			prepareAttack = true; //enemy is now preparing an attack
-		}
-		if (prepareAttack) { //if enemy is preparing attack
+		if (triggerRandomizer == triggerValue) { //if enemy is preparing attack
 			this.magazine.push(new Bullet(this.x, this.y + this.height / 2)); //load magazine with a bullet
-			prepareAttack = false; //finished preparing an attack
 		}
 	}
 	

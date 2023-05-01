@@ -19,12 +19,11 @@ class Player extends Sprite {
 
 		this.newWave = false
 
-		//points for triangular hitbox
-		this.x1, this.y1, this.x2, this.y2, this.x3, this.y3;
+		this.x1, this.y1, this.x2, this.y2, this.x3, this.y3;//points for triangular hitbox
 	}
 
 	//updates player methods
-	update(gameState) {
+	update(gameState) { //needs a gameState parameter when called
 		if (this.alive) { //if player is alive
 			this.display(); //displays player
 			this.displayHealth(); //displays health
@@ -91,7 +90,7 @@ class Player extends Sprite {
 	}
 	
 	//fires shoot
-	fireBullet(gameState) {
+	fireBullet(gameState) { //needs a gameState parameter when called
 		this.magazine.forEach(bullet => {
 			bullet.speed = -5; //displays bullets
 			bullet.display(); //displays bullets
