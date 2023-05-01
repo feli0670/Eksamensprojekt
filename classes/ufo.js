@@ -23,6 +23,7 @@ class Ufo extends Sprite {
 		let triggerRandomizer; //randomizer that will trigger a shot
 		const triggerValue = 1; //value that triggers an attack (bullet)
 		const triggerInterval = 1000; //interval where the probability of shot will be 1/triggerInterval
+
 		if (!this.alive) { //if ufo isn't alive
 			triggerRandomizer = int(random(0,triggerInterval)); //triggerRandomizer is set to a random number continuously
 			if (triggerRandomizer == 1) { //if trigger randomizer hits trigger value
