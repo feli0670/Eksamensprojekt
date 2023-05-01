@@ -86,9 +86,6 @@ class Enemy extends Sprite {
 		const triggerValue = 1; //value that triggers an attack (bullet)
 		let prepareAttack = false; //enemy doesn't attack from start
 		
-		let triggerValue = 1; //value that triggers an attack (bullet)
-		let triggerRandomizer; //randomizer that will trigger a shot
-		
 		triggerRandomizer =  int(random(this.triggerInterval)); //triggerRandomizer is set to a random number continuously
 		if (triggerRandomizer == triggerValue) { //if triggerRandomzier is equal to the triggerValue
 			this.magazine.push(new Bullet(this.x, this.y + this.height / 2)); //load magazine with a bullet
