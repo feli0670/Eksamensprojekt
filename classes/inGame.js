@@ -32,25 +32,25 @@ class EnemiesInGame {
 
 	//updates enemies methods
 	update(choosePlayer, gamestate) {
-		this.enemies.forEach(row => {
-			row.forEach(enemy => {
-			  if (enemy.alive) {
-				 enemy.display();
-				 if (choosePlayer.alive && gamestate) {
-					enemy.updatePosition();
-					enemy.move();
-					enemy.attack();
+		this.enemies.forEach(row => { //runs trough every enemy row
+			row.forEach(enemy => { //runs trough every enemy in row
+			  if (enemy.alive) { //if the enemy is alive
+				 enemy.display(); //display the enemy
+				 if (choosePlayer.alive && gamestate) { //if the player is alive and game running
+					enemy.updatePosition(); //update enemy position
+					enemy.move(); //make enemy move
+					enemy.attack(); //make enemy attack
 				 }
 			  }
 			  enemy.fireBullet(gamestate);
-			  if (this.deadEnemies == this.enemyNumberX * this.enemyNumberY) {
-				 choosePlayer.newWave = true;
-				 if (frameCount > 30) {
-					this.deadEnemies = 0;
-					this.speedIncrease += 0.1;
-					this.triggerIntervalReducer -= 0.05;
-					this.setup();
-					choosePlayer.newWave = false;
+			  if (this.deadEnemies == this.enemyNumberX * this.enemyNumberY) { //if all enemies in wave have been killed
+				 choosePlayer.newWave = true; //new wave is needed
+				 if (frameCount > 30) { //0.5 sec has passed by
+					 this.speedIncrease += 0.1; //increase the speedIncrease value
+					 this.triggerIntervalReducer -= 0.05; //reduce the triggerIntervalReducer
+					 this.setup(); //instansiate new wave of enemies
+					 choosePlayer.newWave = false; //new wave no longer needed
+					 this.deadEnemies = 0; //reset number of dead enemies
 				 }
 			  }
 			});
@@ -66,9 +66,9 @@ class EnemiesInGame {
 
 	//make enmies able to damage player
 	damagePlayer(choosePlayer) {
-		this.enemies.forEach(row => {
-			row.forEach(enemy => {
-				enemy.magazine.forEach((enemyBullet, enemyIndex) => {
+		this.enemies.forEach(row => { //runs trough every enemy row
+			row.forEach(enemy => { //runs trough every enemy in row
+				enemy.magazine.forEach((enemyBullet, enemyIndex) => { //runs trough every enemy bullet
 					if (choosePlayer.triPointHitbox(choosePlayer.x1, choosePlayer.y1, choosePlayer.x2, choosePlayer.y2, choosePlayer.x3, choosePlayer.y3, enemyBullet.x, enemyBullet.y + enemyBullet.height / 2)) { //if player has hit player
 						enemy.magazine.splice(enemyIndex, 1); //destroy enemy bullet by removing from array
 						choosePlayer.hp -= 1; //reduce player hp with 1
@@ -82,14 +82,14 @@ class EnemiesInGame {
 
 	//method for enemy taking damage by player
 	damagedByPlayer(choosePlayer) {
-		this.enemies.forEach((row, rowIndex) => {
-			row.forEach(enemy => {
-				choosePlayer.magazine.forEach((playerBullet, playerIndex) => {
-					if (enemy.alive) {
+		this.enemies.forEach((row, rowIndex) => { //runs trough every enemy row
+			row.forEach(enemy => { //runs trough every enemy in row
+				choosePlayer.magazine.forEach((playerBullet, playerIndex) => { //runs trough every player bullet
+					if (enemy.alive) { //if enemy is alive
 						if (playerBullet.x + playerBullet.width / 2 >= enemy.x - enemy.width / 2 //if player bullet on right side of bunker edge
 							&& playerBullet.x - playerBullet.width / 2 <= enemy.x + enemy.width / 2 //if player bullet on left side of enemy edge
-							&& playerBullet.y + playerBullet.height / 2 >= enemy.y - enemy.height / 2 //if player bullet at enemy altitude from buttom
-							&& playerBullet.y - playerBullet.height / 2 <= enemy.y + enemy.height / 2) { //if player bullet at enemy altitude from top 
+							&& playerBullet.y - playerBullet.height / 2 <= enemy.y + enemy.height / 2 //if player bullet at enemy bottom altitude 
+							&& playerBullet.y - playerBullet.height / 2 >= enemy.y) { //if player bullet at enemy top altitude 
 							choosePlayer.magazine.splice(playerIndex, 1); //destroy player bullet by removing from array
 							enemy.alive = false; //kill enemy by removing from array
 							if (this.deadEnemies == this.enemyNumberX * this.enemyNumberY - 1) { //if all enemies are dead
@@ -98,6 +98,7 @@ class EnemiesInGame {
 							
 							this.deadEnemies += 1; //add 1 to dead enemies
 
+							//point system
 							if (rowIndex == 0) { //if killed enemy on upper row
 								score += 100; //1 is added to score
 							} else if (rowIndex == 1) { //if killed enemy on second highest row
@@ -118,10 +119,10 @@ class EnemiesInGame {
 
 	//enemy and player bullets collide
 	bulletsCollide(choosePlayer) {
-		this.enemies.forEach(row => {
-			row.forEach(enemy => {
-				enemy.magazine.forEach((enemyBullet, enemyIndex) => {
-					choosePlayer.magazine.forEach((playerBullet, playerIndex) => {
+		this.enemies.forEach(row => { //runs trough every enemy row
+			row.forEach(enemy => { //runs trough every enemy in row
+				enemy.magazine.forEach((enemyBullet, enemyIndex) => { //runs trough every enemy bullet
+					choosePlayer.magazine.forEach((playerBullet, playerIndex) => { //runs trough every player bullet
 						if (playerBullet.x + playerBullet.width / 2 >= enemyBullet.x - enemyBullet.width / 2 //player bullet at right side of enemy bullet edge
 							&& playerBullet.x - playerBullet.width / 2 <= enemyBullet.x + enemyBullet.width / 2 //player bullet at left side of enemy bullet edge
 							&& playerBullet.y + playerBullet.height / 2 >= enemyBullet.y - enemyBullet.height / 2 //player bullet at enemy bullet altitude from bottom
@@ -137,8 +138,8 @@ class EnemiesInGame {
 
 	//checks if enemy has reached surface
 	reachedSurface(choosePlayer) {
-		this.enemies.forEach(row => {
-			row.forEach(enemy => {
+		this.enemies.forEach(row => { //runs trough every enemy row
+			row.forEach(enemy => { //runs trough every enemy in row
 				if (enemy.y + enemy.height / 2 >= choosePlayer.y - choosePlayer.height / 2) { //if nemy has reached enemy altitude
 					choosePlayer.hp = 0; //kill player
 				}
@@ -146,6 +147,7 @@ class EnemiesInGame {
 		});
 	}
 }
+
 
 class BunkersInGame {
 	constructor() {
@@ -165,7 +167,7 @@ class BunkersInGame {
 
 	//updates bunkers
 	update(choosePlayer, chooseEnemies, gameState) {
-		this.bunkers.forEach(bunker => {
+		this.bunkers.forEach(bunker => { //runs trough every bunker
 			bunker.display(); //displays them
 		});
 
@@ -177,9 +179,10 @@ class BunkersInGame {
 	}
 
 	//method for enemy taking damage by player
-	damagedByPlayer(choosePlayer) {
-		this.bunkers.forEach((bunker, bunkerIndex) => { //runs through every bunker
+	damagedByPlayer(choosePlayer) { 
+		this.bunkers.forEach((bunker) => { //runs through every bunker
 			choosePlayer.magazine.forEach((playerBullet, playerIndex) => { //runs trough bullets
+
 				//if bullet hits bunker (compares bunker and bullet location)
 				if (playerBullet.x + playerBullet.width / 2 >= bunker.x - bunker.width / 2 //if player bullet on right side of bunker edge
 					&& playerBullet.x - playerBullet.width / 2 <= bunker.x + bunker.width / 2 //if player bullet on left side of enemy edge
@@ -193,17 +196,17 @@ class BunkersInGame {
 	}
 
 	//method for enemy taking damage by enemy
-	damagedByEnemy(chooseEnemies) {
-		this.bunkers.forEach((bunker, bunkerIndex) => {
-			chooseEnemies.enemies.forEach(row => {
-				row.forEach(enemy => {
-					enemy.magazine.forEach((enemyBullet, enemyIndex) => {
+	damagedByEnemy(chooseEnemies) { 
+		this.bunkers.forEach((bunker) => { //runs through every bunker
+			chooseEnemies.enemies.forEach(row => { //runs trough every enemy row
+				row.forEach(enemy => { //runs trough every enemy in row
+					enemy.magazine.forEach((enemyBullet, enemyIndex) => { //runs trough every enemy bullet
 						if (enemyBullet.x + enemyBullet.width / 2 >= bunker.x - bunker.width / 2 //if enemy bullet on right side of bunker edge
 							&& enemyBullet.x - enemyBullet.width / 2 <= bunker.x + bunker.width / 2 //if enemy bullet on left side of enemy edge
 							&& enemyBullet.y + enemyBullet.height / 2 >= bunker.y - bunker.height / 2 //if enemy bullet at bunker altitude from top
 							&& enemyBullet.y - enemyBullet.height / 2 <= bunker.y + bunker.height / 2) { //if enemy bullet at bunker altitude from buttom
 							enemy.magazine.splice(enemyIndex, 1); //destroy enemy bullet by removing from array
-						bunker.hp -= 1; //damage bunker looses health
+							bunker.hp -= 1; //damage bunker looses health
 						}
 					});
 				});
@@ -212,7 +215,7 @@ class BunkersInGame {
 	}
 
 	destroy() {
-		this.bunkers.forEach((bunker, bunkerIndex) => {
+		this.bunkers.forEach((bunker, bunkerIndex) => { //runs trough every bunker
 			if (bunker.hp == 0) { //if bunker fully destoryed
 				this.bunkers.splice(bunkerIndex, 1); //destry bunker by removing from array
 			}
@@ -234,15 +237,15 @@ class UfoInGame {
 	update(choosePlayer, gameState) {
 		this.ufo.display(); //displays ufo
 		if (gameState) { //if ufo alive and game is started
-			this.ufo.move(); //make ufo move
-			this.ufo.updatePosition(); //update ufo position
-			this.damagedByPlayer(choosePlayer); //make it possible for ufo to get dammaged by player
+				this.ufo.move(); //make ufo move
+				this.ufo.updatePosition(); //update ufo position
+				this.damagedByPlayer(choosePlayer); //make it possible for ufo to get dammaged by player
 		}
 	}
 
 	//ufo taking damage by player
 	damagedByPlayer(choosePlayer) {
-		choosePlayer.magazine.forEach((playerBullet, playerIndex) => {
+		choosePlayer.magazine.forEach((playerBullet, playerIndex) => { //runs trough every player bullet
 			if (playerBullet.x + playerBullet.width / 2 >= this.ufo.x - this.ufo.width / 2 //if player bullet on right side of bunker edge
 				&& playerBullet.x - playerBullet.width / 2 <= this.ufo.x + this.ufo.width / 2 //if player bullet on left side of ufo edge
 				&& playerBullet.y + playerBullet.height / 2 >= this.ufo.y //if player bullet at ufo alitude from top

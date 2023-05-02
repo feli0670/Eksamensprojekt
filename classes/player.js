@@ -19,17 +19,11 @@ class Player extends Sprite {
 
 		this.newWave = false
 
-		//points for triangular hitbox
-		this.x1;
-		this.y1;
-		this.x2;
-		this.y2;
-		this.x3;
-		this.y3;
+		this.x1, this.y1, this.x2, this.y2, this.x3, this.y3;//points for triangular hitbox
 	}
 
 	//updates player methods
-	update(gameState) {
+	update(gameState) { //needs a gameState parameter when called
 		if (this.alive) { //if player is alive
 			this.display(); //displays player
 			this.displayHealth(); //displays health
@@ -58,7 +52,7 @@ class Player extends Sprite {
 		if (!this.hit) { //if player hasn't been hit
 			if (keyCode == 32 && this.cooledDown() && !this.newWave) { //if SPACE key and weapon cooldownTime passed by
 				this.loadMagazine(); //calls method, bullet is fired
-				frameCount = 0; //resetting framcount
+				frameCount = 0; //reset framecount
 			}
 			
 			//statements for controlling player direction
@@ -88,7 +82,7 @@ class Player extends Sprite {
 
 	//checks if weapon has cooled down
 	cooledDown() {
-		if (frameCount >= this.cooldownTime) { //if cooldownTime has passed by
+		if (frameCount >= this.cooldownTime) { //if cooldown time has passed by
 			return true;
 		} else {
 			return false;
@@ -96,11 +90,11 @@ class Player extends Sprite {
 	}
 	
 	//fires shoot
-	fireBullet(gameState) {
+	fireBullet(gameState) { //needs a gameState parameter when called
 		this.magazine.forEach(bullet => {
-			bullet.speed = -5; //initialize players bullet speed
+			bullet.speed = -5; //displays bullets
 			bullet.display(); //displays bullets
-			if (gameState) {
+			if (gameState) { //if game is running
 				bullet.updatePosition(); //shoots bullet
 			}
 	
@@ -115,9 +109,10 @@ class Player extends Sprite {
 		const hpSize = 50; //hp size value
 		const xOffset = width - this.width; //hp offset
 
+		//hp text
 		fill('#71f200'); 
 		textSize(hpSize);
-		text('HP:', xOffset - hpSize * 5, hpSize); //hp text
+		text('HP:', xOffset - hpSize * 5, hpSize);
 		
 		for (let i = 0; i < this.hp; i++) { //runs through hp value
 			image(this.hpImg, xOffset + this.width * -i, hpSize, hpSize, hpSize); //displays the number hp
@@ -146,12 +141,12 @@ class Player extends Sprite {
 
 	//triangular hit detection, recives 3 points creating player outline (hitbox), and the point which is checked for collision
 	triPointHitbox(x1, y1, x2, y2, x3, y3, myX, myY) {
-		let areaOrig = abs((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1));
-		let area1 = abs((x1 - myX) * (y2 - myY) - (x2 - myX) * (y1 - myY));
-		let area2 = abs((x2 - myX) * (y3 - myY) - (x3 - myX) * (y2 - myY));
-		let area3 = abs((x3 - myX) * (y1 - myY) - (x1 - myX) * (y3 - myY));
+		let areaOrig = abs((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)); //Heron's formula for calculating the area of the triangle
+		let area1 = abs((x1 - myX) * (y2 - myY) - (x2 - myX) * (y1 - myY)); //calculating area from point 1, 2 and dynamic point
+		let area2 = abs((x2 - myX) * (y3 - myY) - (x3 - myX) * (y2 - myY)); //calculating area from point 2, 3 and dynamic point
+		let area3 = abs((x3 - myX) * (y1 - myY) - (x1 - myX) * (y3 - myY)); //calculating area from point 1, 3 and dynamic point
 
-		if (area1 + area2 + area3 == areaOrig) {
+		if (area1 + area2 + area3 == areaOrig) { //if the dynamic point is inside the triangles
 			return true;
 		} else {
 			return false;
